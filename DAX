@@ -1,0 +1,64 @@
+DAX Measures & Calculated Columns
+1️⃣ Core KPI Measures
+Measure	Description
+Total Listings = COUNTROWS('Fact_Features')	Total active listings in the dataset.
+Unique Hosts = DISTINCTCOUNT('Fact_Features'[host_id])	Measures host diversity.
+Average Price = AVERAGE('Fact_Features'[price])	Baseline pricing metric.
+Average Reviews = AVERAGE('Fact_Features'[number_of_reviews])	Mean reviews per listing.
+Average Rating = AVERAGE('Fact_Features'[review_scores_rating])	Overall satisfaction indicator.
+Occupancy % = AVERAGE('Fact_Features'[occupancy_proxy])	Derived from availability proxy (SQL).
+Total Revenue (Proxy) = SUM('Fact_Features'[revenue_proxy])	Revenue approximation using price × booked nights.
+2️⃣ City & Neighbourhood Normalization
+Column	Description
+City_Normalized =	
+City_Normalized =
+VAR c = LOWER('Fact_Features'[city])
+RETURN
+SWITCH(
+    TRUE(),
+    ISBLANK(c), "Amsterdam",
+    LEFT(c,2) = "am", "Amsterdam",
+    c IN {"амстердам", "амстердам "}, "Amsterdam",
+    c
+)
+
+
+Cleans and unifies all Amsterdam variants (e.g., “Amsterdam Noord”, “Амстердам”) under one label.
+
+3️⃣ Time Intelligence
+Measure	Description
+Total Revenue (Monthly) = CALCULATE([Total Revenue (Proxy)], DATESMTD('Calendar'[Date]))	Revenue for current month.
+Monthly Price Trend = AVERAGEX(VALUES('Calendar'[Month]), [Average Price])	Shows average price evolution.
+YoY Growth % = DIVIDE(([Total Revenue] - CALCULATE([Total Revenue], SAMEPERIODLASTYEAR('Calendar'[Date]))), CALCULATE([Total Revenue], SAMEPERIODLASTYEAR('Calendar'[Date])))	Tracks revenue growth year over year.
+4️⃣ Review & Amenities Analysis
+Measure	Description
+Total True Amenities = `SUMX('Fact_Features', IF('Fact_Features'[has_wifi]	
+Review-to-Amenity Ratio = DIVIDE([Average Reviews], [Total True Amenities])	Highlights impact of amenities on reviews.
+High Rating % = DIVIDE(COUNTROWS(FILTER('Fact_Features', 'Fact_Features'[review_scores_rating] >= 4.8)), COUNTROWS('Fact_Features'))	Share of highly-rated listings.
+5️⃣ Host & Stay Classification
+Measure	Description
+Pro Hosts % = DIVIDE(COUNTROWS(FILTER('Dim_Host', 'Dim_Host'[is_pro_host] = TRUE())), COUNTROWS('Dim_Host'))	Ratio of professional hosts.
+Long-Term Stays % = DIVIDE(COUNTROWS(FILTER('Fact_Features', 'Fact_Features'[stay_type] = "long_term")), COUNTROWS('Fact_Features'))	Share of long-term listings.
+Listings per Host = AVERAGEX(VALUES('Dim_Host'[host_id]), [Total Listings])	Host activity average.
+6️⃣ Review Quality Metrics
+Measure	Description
+Avg Reviews per 100 Listings = DIVIDE([Average Reviews]*100, [Total Listings])	Normalized engagement rate.
+Top Rated Listings (Count) = COUNTROWS(FILTER('Fact_Features', 'Fact_Features'[review_scores_rating] >= 4.9))	Number of top-rated properties.
+Bottom 10 by Price (High Reviews) = TOPN(10,
+    FILTER('Fact_Features', NOT(ISBLANK('Fact_Features'[review_scores_rating]))),
+    'Fact_Features'[review_scores_rating], DESC,
+    'Fact_Features'[price], ASC
+)
+
+7️⃣ Advanced & Supporting Measures
+Measure	Description
+Revenue per Listing (RPL) = DIVIDE([Total Revenue (Proxy)], [Total Listings])	Normalized revenue metric.
+Occupancy vs Rating Corr (Visual) – Scatter plot comparison of occupancy and rating.	
+Amenity Impact Score (Custom) = weighted index combining Wi-Fi, AC, kitchen flags.	
+Dynamic Segmentation (Tourist vs Long-Term) – Used slicers + measure filters for user-driven segmentation.	
+8️⃣ Conditional Formatting
+
+Matrix: Highlighted cells using DAX-based TRUE/FALSE ratio = DIVIDE(COUNT(TRUE), COUNTALL)
+→ Applied a color scale (green = high ratio, red = low).
+
+Used for “Reviews × Amenities” and “Stay Type × Host Type” matrices.
