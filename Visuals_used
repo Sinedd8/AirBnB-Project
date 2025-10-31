@@ -1,0 +1,33 @@
+*Power BI Visuals Used*
+
+Map Visual (Filled Map): To show Airbnb listing density and geographic distribution across cities and neighbourhoods.
+
+Card Visuals: To highlight top KPIs such as total listings, unique hosts, average price, total revenue, and average review score.
+
+Bar / Column Charts: To compare metrics like average price, occupancy, and review scores across cities, room types, and hosts.
+
+Stacked / 100% Column Charts: To show category composition such as stay type (tourist vs long-term) and room type mix.
+
+Line Charts: To track monthly and yearly trends for price, availability, and reviews over time.
+
+Area Charts: To show cumulative or comparative time-based trends like revenue and occupancy changes.
+
+Matrix Table: To cross-compare amenities and reviews, with conditional formatting to highlight high ratios.
+
+Table Visuals: To display listing-level data for drill-through analysis and detail inspection.
+
+Scatter Plot: To analyze relationships such as price vs review score or host listing count vs occupancy.
+
+Pie / Donut Charts: To visualize proportions for room type, cancellation policy, and host classification.
+
+Decomposition Tree: To break down factors driving pricing and review differences hierarchically.
+
+Word Cloud: To visualize most common amenities and key phrases from text fields.
+
+Q&A Visual: To allow natural-language exploration (e.g. “Top 10 cheapest listings with highest reviews”).
+
+KPI Indicators: To summarize core metrics and highlight change over time or against targets.
+
+Bookmarks: To switch between thematic pages (Market Overview, Pricing, Hosts, Reviews, Trends, QC).
+
+Drill-Through Pages: To navigate from aggregated visuals down to listing- or host-level details.
