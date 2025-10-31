@@ -1,0 +1,109 @@
+Steps Taken — SQL to Power BI
+
+1️⃣ Data Import & Exploration
+
+Imported the raw InsideAirbnb dataset (airbnbnl_raw) into PostgreSQL (~2GB trimmed to Netherlands).
+
+Verified table structure with information_schema.columns and checked data sanity using COUNT(*), LIMIT 5, and JSON-based NULL profiling.
+
+Purpose: confirm schema integrity and detect missing / malformed values before cleaning.
+
+2️⃣ Data Cleaning & Normalization
+
+Created v_airbnb_clean view using CAST, REGEXP_REPLACE, TRIM, LOWER, COALESCE, and NULLIF.
+
+Converted text-based numerics (price, fees, availability) into numeric types and harmonized EU/US separators.
+
+Purpose: make messy text data queryable and ready for type-safe analysis.
+
+3️⃣ Deduplication
+
+Built v_airbnb_latest using ROW_NUMBER() OVER (PARTITION BY listing_id ORDER BY last_scraped DESC) to keep the newest listing snapshot.
+
+Purpose: ensure a one-row-per-listing structure for BI integration.
+
+4️⃣ Dimensional Modeling
+
+Created dimensions for context and join stability:
+
+dim_host: host tenure, listing count, pro-host flag.
+
+dim_location: city and neighbourhood centroids for mapping.
+
+dim_calendar_month: generated month scaffold using generate_series.
+
+Purpose: enable clean star-schema joins and aggregations in Power BI.
+
+5️⃣ Feature Engineering
+
+Built v_fact_features_joined combining facts with dimensions.
+
+Engineered columns:
+
+occupancy_proxy, booked_nights_proxy, revenue_proxy
+
+Stay classification (tourist vs long_term)
+
+Amenity flags (Wi-Fi, kitchen, AC) from text using ILIKE and regex.
+
+Purpose: pre-compute business-ready KPIs directly in SQL.
+
+6️⃣ Aggregations & Analytics
+
+Created analytic views for advanced insights:
+
+v_city_roomtype_summary → city/room-type comparisons
+
+v_city_price_quantiles → medians via PERCENTILE_CONT
+
+v_corr_snaps → correlations via CORR()
+
+v_top5_price_per_city → window-function ranking
+
+Purpose: demonstrate analytical fluency beyond simple aggregates.
+
+7️⃣ Data Quality & Set Operations
+
+Created v_qc_setops using INTERSECT and EXCEPT to check logic mismatches (e.g., pro-host vs host count, stay type vs nights).
+
+Purpose: validate the accuracy and internal consistency of the dataset.
+
+8️⃣ Export for Power BI
+
+Connected Power BI directly to the analytics schema in PostgreSQL.
+
+Imported all key views (v_fact_features_joined, dims, QC).
+
+Verified schema joins (star-schema structure: 1 fact → 3 dims).
+
+Purpose: provide a stable data model for analysis and visuals.
+
+9️⃣ Power BI Modeling & Visualization
+
+Created relationships manually where needed (city_key, host_id, month_key).
+
+Added DAX measures for totals, averages, occupancy %, and review ratios.
+
+Built multi-page dashboard:
+
+Market Overview
+
+Pricing Insights
+
+Host & Occupancy
+
+Reviews & Amenities
+
+Trends Over Time
+
+QC / Data Integrity
+
+🔟 Final Output
+
+Delivered an interactive Power BI dashboard using:
+
+Map, bar, line, scatter, pie, matrix, word cloud, and KPI visuals.
+
+Bookmarks, drill-through pages, and Q&A exploration.
+
+Purpose: end-to-end demonstration of SQL + BI proficiency, from raw data to polished insights.
