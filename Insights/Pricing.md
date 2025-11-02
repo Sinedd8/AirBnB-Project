@@ -1,4 +1,4 @@
-**Pricing Insights**
+**Pricing insights**
 
 Most listings price between €100–€200 per night, which aligns with Amsterdam being one of the most expensive European cities. Median and mean price are close, meaning prices are generally well behaved — but the mean being slightly higher reveals extreme outliers (like the €999/night listing) pulling the average upward without actually delivering occupancy or long-term revenue benefit.
 
