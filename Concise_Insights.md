@@ -23,3 +23,12 @@ Amsterdam stays in demand all year. Haarlem spikes around September (student cyc
 
 ### Misc Deep Cuts
 Tourist max price €999, long-term max ~€300. Some “no AC but entire home” were extremely high priced — location + uniqueness > amenity set.
+
+
+
+## Recommended actions
+
+- Increase long-term supply **near** Amsterdam (Amstel / Amstelveen / Haarlem) to absorb student + expat demand spillover.
+- Hosts should anchor price around €100–€200 and differentiate through space/kitchen rather than AC or micro-amenities.
+- Airbnb should segment marketing for Haarlem in September → high seasonal conversion window.
+- Pro host onboarding should target non-Amsterdam urban areas to raise supply diversity.
